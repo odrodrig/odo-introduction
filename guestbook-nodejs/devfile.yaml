@@ -1,0 +1,52 @@
+schemaVersion: 2.0.0
+metadata:
+  name: nodejs-mongo
+  version: 1.0.0
+components:
+  - name: runtime
+    container: 
+      image: registry.access.redhat.com/ubi8/nodejs-12:1-45
+      memoryLimit: 1024Mi
+      mountSources: true
+      sourceMapping: /project
+      env:
+        - name: MONGO_HOST
+          value: ${GUESTBOOK_NODEJS_SERVICE_HOST}
+        - name: MONGO_PORT
+          value: "27017"
+      endpoints:
+        - name: http-3000
+          targetPort: 3000
+  - name: mongo
+    container: 
+      image: docker.io/mongo:4
+      volumeMounts:
+        - name: mongo-storage
+          path: /data/db
+      endpoints: 
+        - name: mongo
+          targetPort: 27017
+          attributes:
+            discoverable: "true"
+            public: "true"
+  - name: mongo-storage
+    volume:
+      size: 1Gi
+commands:
+  - id: build
+    exec:
+      component: runtime
+      commandLine: npm install
+      workingDir: /project/src
+      group:
+        kind: build
+        isDefault: true
+  - id: run
+    exec:
+      component: runtime
+      commandLine: npm start
+      workingDir: /project/src
+      group:
+        kind: run
+        isDefault: true
+

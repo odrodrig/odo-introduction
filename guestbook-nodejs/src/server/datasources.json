@@ -1,0 +1,19 @@
+{
+  "in-memory": {
+    "name": "in-memory",
+    "localStorage": "",
+    "file": "",
+    "connector": "memory"
+  },
+  "mongo": {
+    "host": "${MONGO_HOST}",
+    "port": "${MONGO_PORT}",
+    "url": "",
+    "database": "${MONGO_DB}",
+    "password": "${MONGO_PASS}",
+    "name": "mongo",
+    "user": "${MONGO_USER}",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  }
+}
